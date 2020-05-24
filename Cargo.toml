@@ -1,0 +1,10 @@
+[package]
+name = "rust-snippets"
+version = "0.1.0"
+authors = ["mijinko17 <kougouseikeidansi@gmail.com>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+cargo-snippet = "0.5"
