@@ -2,7 +2,7 @@ use cargo_snippet::snippet;
 
 use crate::graph::graph::Graph;
 
-#[snippet("Graph")]
+#[snippet("dijkstra")]
 pub fn dijkstra(g: &Graph, start: usize) -> Vec<i64> {
     use std::cmp::Reverse;
     let mut res = vec![std::i64::MAX; g.len()];
