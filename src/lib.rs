@@ -4,3 +4,4 @@
 pub mod combination_mod;
 pub mod graph;
 pub mod sample;
+pub mod union_find;
