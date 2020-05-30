@@ -2,24 +2,26 @@ use cargo_snippet::snippet;
 
 #[snippet("BinarySearch")]
 #[snippet("LowerUpperBound")]
-pub fn meguru_binary_search<T, F>(mut ok: T, mut no: T, mut is_valid: F, error: T) -> T
+pub fn meguru_binary_search<T, F>(ok: T, no: T, is_valid: F, error: T) -> T
 where
     T: std::convert::From<u8>
         + std::ops::Add<Output = T>
         + std::ops::Div<Output = T>
         + std::cmp::Ord
         + std::marker::Copy,
-    F: FnMut(T) -> bool,
+    F: Fn(T) -> bool,
 {
-    while ok + error < no || no + error < ok {
-        let mid = (ok + no) / T::from(2u8);
+    itertools::iterate((ok, no), |&(temp_ok, temp_no)| {
+        let mid = (temp_ok + temp_no) / T::from(2u8);
         if is_valid(mid) {
-            ok = mid;
+            (mid, temp_no)
         } else {
-            no = mid;
+            (temp_ok, mid)
         }
-    }
-    ok
+    })
+    .find(|&(temp_ok, temp_no)| temp_ok + error >= temp_no && temp_no + error >= temp_ok)
+    .unwrap()
+    .0
 }
 
 #[snippet("LowerUpperBound")]
