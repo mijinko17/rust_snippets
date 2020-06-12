@@ -4,15 +4,11 @@ use cargo_snippet::snippet;
 #[snippet("LowerUpperBound")]
 pub fn meguru_binary_search<T, F>(ok: T, no: T, is_valid: F, error: T) -> T
 where
-    T: std::convert::From<u8>
-        + std::ops::Add<Output = T>
-        + std::ops::Div<Output = T>
-        + std::cmp::Ord
-        + std::marker::Copy,
+    T: num::PrimInt,
     F: Fn(T) -> bool,
 {
     itertools::iterate((ok, no), |&(temp_ok, temp_no)| {
-        let mid = (temp_ok + temp_no) / T::from(2u8);
+        let mid = (temp_ok + temp_no) / T::from(2).unwrap();
         if is_valid(mid) {
             (mid, temp_no)
         } else {

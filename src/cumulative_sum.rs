@@ -1,25 +1,23 @@
 use cargo_snippet::snippet;
 
 #[snippet("CumulativeSum")]
-struct CumulativeSum {
-    cum: Vec<i64>,
+struct CumulativeSum<T: num::Num + Copy> {
+    cum: Vec<T>,
 }
 
 #[snippet("CumulativeSum")]
-impl CumulativeSum {
-    pub fn from_vec(v: &Vec<i64>) -> Self {
+impl<T: num::Num + Copy> CumulativeSum<T> {
+    pub fn from_vec(v: &Vec<T>) -> Self {
         CumulativeSum {
-            cum: vec![0]
-                .iter()
-                .chain(v.iter())
-                .scan(0, |acc, &x| {
-                    *acc += x;
+            cum: (std::iter::once(&T::zero()).chain(v.iter()))
+                .scan(T::zero(), |acc, &x| {
+                    *acc = *acc + x;
                     Some(*acc)
                 })
                 .collect(),
         }
     }
-    pub fn query(&self, a: usize, b: usize) -> i64 {
+    pub fn query(&self, a: usize, b: usize) -> T {
         self.cum[b] - self.cum[a]
     }
 }
@@ -27,7 +25,7 @@ impl CumulativeSum {
 #[test]
 fn test_cumulative_sum() {
     let v = vec![4, 1, -5, 3, 10];
-    let cum: CumulativeSum = CumulativeSum::from_vec(&v);
+    let cum = CumulativeSum::from_vec(&v);
     let n = v.len();
     for i in 0..=n {
         for j in i..=n {
