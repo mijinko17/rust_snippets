@@ -1,7 +1,7 @@
 use cargo_snippet::snippet;
 
-#[snippet("ExtGcd")]
-#[snippet("InvMod")]
+#[snippet("ext_gcd")]
+#[snippet("inv_mod")]
 fn ext_gcd<T>(a: T, b: T) -> (T, T)
 where
     T: num::Num + num::Signed + Copy,
@@ -14,7 +14,7 @@ where
     }
 }
 
-#[snippet("InvMod")]
+#[snippet("inv_mod")]
 fn inv_mod<T>(a: T, modulo: T) -> T
 where
     T: num::Num + num::Signed + Copy,
