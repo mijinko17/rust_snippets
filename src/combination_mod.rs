@@ -26,10 +26,13 @@ impl CombinationMod {
             modulo: modulo,
         }
     }
-    pub fn query(&self, n: i64, r: i64) -> i64 {
-        self.fac[n as usize] * self.inv_fac[r as usize] % self.modulo
-            * self.inv_fac[(n - r) as usize]
-            % self.modulo
+    pub fn comb(&self, n: i64, r: i64) -> i64 {
+        let (n, r) = (n as usize, r as usize);
+        self.fac[n] * self.inv_fac[r] % self.modulo * self.inv_fac[n - r] % self.modulo
+    }
+    pub fn perm(&self, n: i64, r: i64) -> i64 {
+        let (n, r) = (n as usize, r as usize);
+        self.fac[n] * self.inv_fac[n - r] % self.modulo
     }
     pub fn inverse(&self, n: i64) -> i64 {
         self.inv[n as usize]
@@ -37,13 +40,31 @@ impl CombinationMod {
 }
 
 #[test]
-fn test_combination_mod() {
+fn test_combination_mod_comb() {
     let modulo = 1000000007;
     let comb = CombinationMod::new(100, modulo);
-    assert_eq!(comb.query(7, 3), 35);
-    assert_eq!(comb.query(32, 16), 601080390);
-    assert_eq!(comb.query(5, 0), 1);
-    assert_eq!(comb.query(13, 13), 1);
+    assert_eq!(comb.comb(7, 3), 35);
+    assert_eq!(comb.comb(32, 16), 601080390);
+    assert_eq!(comb.comb(5, 0), 1);
+    assert_eq!(comb.comb(13, 13), 1);
+}
+
+#[test]
+fn test_combination_mod_perm() {
+    let modulo = 1000000007;
+    let comb = CombinationMod::new(100, modulo);
+    for n in 0..100 {
+        for r in 0..=n {
+            let n_p_r = ((n - r + 1)..=n).fold(1, |acc, x| acc * x % modulo);
+            assert_eq!(comb.perm(n, r), n_p_r);
+        }
+    }
+}
+
+#[test]
+fn test_combination_mod_inverse() {
+    let modulo = 1000000007;
+    let comb = CombinationMod::new(100, modulo);
     for i in 1..100 {
         assert_eq!(comb.inverse(i) * i % modulo, 1);
     }
