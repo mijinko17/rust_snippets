@@ -19,15 +19,15 @@ impl Dsu {
     pub fn merge(&mut self, a: usize, b: usize) -> usize {
         let (mut x, mut y) = (self.leader(a), self.leader(b));
         if x == y {
-            y
+            x
         } else {
             let (size_x, size_y) = (self.size(x), self.size(y));
             if size_x < size_y {
                 std::mem::swap(&mut x, &mut y);
             }
-            self.nodes[y] = DsuNode::Leader(size_x + size_y);
-            self.nodes[x] = DsuNode::Child(y);
-            y
+            self.nodes[x] = DsuNode::Leader(size_x + size_y);
+            self.nodes[y] = DsuNode::Child(x);
+            x
         }
     }
     pub fn same(&mut self, a: usize, b: usize) -> bool {
