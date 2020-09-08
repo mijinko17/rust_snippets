@@ -5,6 +5,7 @@ pub mod binary_search;
 pub mod combination_mod;
 pub mod cumulative_sum;
 pub mod divisor;
+pub mod dsu;
 pub mod ext_gcd;
 pub mod graph;
 pub mod pow;

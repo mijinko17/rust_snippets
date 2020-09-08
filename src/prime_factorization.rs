@@ -29,11 +29,11 @@ fn prime_factorization<T: num::PrimInt>(x: T) -> std::collections::BTreeMap<T, i
                 None
             } else {
                 let divisor = if i * i <= *state { i } else { *state };
-                let mut index = 0;
-                while T::is_zero(&(*state % divisor)) {
-                    *state = *state / divisor;
-                    index += 1;
-                }
+                let (next_state, index) =
+                    itertools::iterate((*state, 0), |&(state, index)| (state / divisor, index + 1))
+                        .find(|&(state, _)| !T::is_zero(&(state % divisor)))
+                        .unwrap();
+                *state = next_state;
                 Some((divisor, index))
             }
         })
